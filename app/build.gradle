@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -15,6 +18,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_KEY", "\"87c35db9718530498e6f8be2514da8cf5989a\""
+        buildConfigField "String", "BASE_URL", "\"https://capiter-a7b2.restdb.io/rest/\""
     }
 
     buildTypes {
@@ -30,16 +35,47 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
+    flavorDimensions "default"
+    productFlavors{
+        customer{
+            applicationId "com.example.capitertask.customer"
+        }
+        dealer{
+            applicationId "com.example.capitertask.dealer"
+        }
+    }
 }
 
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
+    implementation "androidx.activity:activity-ktx:1.1.0"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //retrofit
+    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //rx
+    def rx_version = "3.0.1"
+    implementation("io.reactivex.rxjava3:rxkotlin:$rx_version")
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 }
