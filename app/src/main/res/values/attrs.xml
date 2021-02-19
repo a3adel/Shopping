@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProductView">
+        <attr name="type" format="enum">
+            <enum name="NONE" value="0" />
+            <enum name="PRODUCT" value="1" />
+            <enum name="CART" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

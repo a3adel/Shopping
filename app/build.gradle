@@ -78,4 +78,10 @@ dependencies {
     def rx_version = "3.0.1"
     implementation("io.reactivex.rxjava3:rxkotlin:$rx_version")
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    //room
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
 }
