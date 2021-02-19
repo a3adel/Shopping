@@ -1,6 +1,8 @@
 package com.example.capitertask.di
 
 import com.example.capitertask.data.api.CustomerAPIService
+import com.example.capitertask.data.repos.ProductRepositoryImpl
+import com.example.capitertask.domain.data_sources.ProductRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +17,11 @@ class CustomerModule {
     @Provides
     fun provideApi(retrofit: Retrofit): CustomerAPIService {
         return retrofit.create(CustomerAPIService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl):ProductRepository{
+        return productRepositoryImpl
     }
 }
