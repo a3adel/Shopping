@@ -32,5 +32,7 @@ class MainActivity : BaseActivity() {
             binding.loadingPb.visibility = View.VISIBLE
         else
             binding.loadingPb.visibility = View.GONE
+
+
     }
 }

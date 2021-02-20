@@ -40,6 +40,7 @@ class ProductsViewModel @Inject constructor(
                 }
 
                 override fun onError(e: Throwable?) {
+                    showProgressBarMutableLiveData.value = SingleEvent<Boolean>(false)
                     e?.let {
                         it.message?.let {
                             toastMutableLiveData.value = SingleEvent(it)
