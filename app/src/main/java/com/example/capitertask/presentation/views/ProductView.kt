@@ -20,6 +20,28 @@ class ProductView @JvmOverloads constructor(
             0, 0
         ).apply {
             try {
+                val name = getString(R.styleable.ProductView_name)
+                _binding.nameTextView.text = name
+                val amount = getInteger(R.styleable.ProductView_amount, 0)
+                _binding.countTextView.text = amount.toString()
+                val price = getFloat(R.styleable.ProductView_price, -1f)
+                if (price > 0) {
+                    _binding.priceTextView.apply {
+                        visibility = VISIBLE
+                        text = price.toString()
+                    }
+
+                } else {
+                    _binding.priceTextView.visibility = INVISIBLE
+                }
+                val srcDrawable = getResourceId(R.styleable.ProductView_src, -1)
+                if (srcDrawable > -1) {
+                    _binding.productImageView.apply {
+                        visibility = VISIBLE
+                        setImageResource(srcDrawable)
+                    }
+                } else {
+                }
                 val type = getInteger(R.styleable.ProductView_type, 0)
                 when (type) {
                     0 -> {
