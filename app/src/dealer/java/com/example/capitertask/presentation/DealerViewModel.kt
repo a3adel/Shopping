@@ -1,12 +1,12 @@
 package com.example.capitertask.presentation
 
-import com.example.capitertask.domain.use_cases.GetOrdersUseCase
 import com.example.capitertask.domain.models.OrderModel
+import com.example.capitertask.domain.use_cases.GetOrdersUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
 import javax.inject.Inject
 import javax.inject.Named
@@ -22,16 +22,13 @@ class DealerViewModel @Inject constructor(
         _getOrdersUseCase.getOrders()
             .subscribeOn(_observed)
             .observeOn(_observer)
-            .subscribe(object : Observer<List<OrderModel>> {
+            .subscribe(object : SingleObserver<List<OrderModel>> {
                 override fun onSubscribe(d: Disposable?) {
                     showProgressBarMutableLiveData.value = SingleEvent(true)
 
                     d?.let { addDisposable(d) }
                 }
 
-                override fun onNext(t: List<OrderModel>?) {
-                    toastMutableLiveData.value = SingleEvent(t?.size.toString())
-                }
 
                 override fun onError(e: Throwable?) {
                     showProgressBarMutableLiveData.value = SingleEvent(false)
@@ -39,8 +36,11 @@ class DealerViewModel @Inject constructor(
                     e?.let { toastMutableLiveData.value = SingleEvent(e.localizedMessage) }
                 }
 
-                override fun onComplete() {
+
+                override fun onSuccess(t: List<OrderModel>?) {
                     showProgressBarMutableLiveData.value = SingleEvent(false)
+                    toastMutableLiveData.value = SingleEvent(t?.size.toString())
+
                 }
             })
     }
