@@ -3,7 +3,7 @@ package com.example.capitertask.presentation.products
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.capitertask.databinding.AsdBinding
+import com.example.capitertask.databinding.ProductItemBinding
 import com.example.capitertask.domain.models.ProductModel
 
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
@@ -15,12 +15,12 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = AsdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProductViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.itemView.nice
+
     }
 
     override fun getItemCount(): Int {
@@ -28,6 +28,6 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     }
 }
 
-class ProductViewHolder(itemView: AsdBinding) : RecyclerView.ViewHolder(itemView.root) {
+class ProductViewHolder(itemView: ProductItemBinding) : RecyclerView.ViewHolder(itemView.root) {
 
 }
