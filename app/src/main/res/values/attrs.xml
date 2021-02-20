@@ -6,5 +6,9 @@
             <enum name="PRODUCT" value="1" />
             <enum name="CART" value="2" />
         </attr>
+        <attr name="name" format="string"/>
+        <attr name="price" format="float"/>
+        <attr name="amount" format="integer"/>
+        <attr name="src" format="reference"/>
     </declare-styleable>
 </resources>
