@@ -10,7 +10,7 @@ import com.example.capitertask.databinding.ViewProductBinding
 class ProductView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    private val _binding: ViewProductBinding =
+    val binding: ViewProductBinding =
         ViewProductBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
@@ -21,22 +21,20 @@ class ProductView @JvmOverloads constructor(
         ).apply {
             try {
                 val name = getString(R.styleable.ProductView_name)
-                _binding.nameTextView.text = name
+                binding.nameTextView.text = name
                 val amount = getInteger(R.styleable.ProductView_amount, 0)
-                _binding.countTextView.text = amount.toString()
+                binding.countTextView.text = amount.toString()
                 val price = getFloat(R.styleable.ProductView_price, -1f)
-                if (price > 0) {
-                    _binding.priceTextView.apply {
-                        visibility = VISIBLE
-                        text = price.toString()
-                    }
 
-                } else {
-                    _binding.priceTextView.visibility = INVISIBLE
+                binding.priceTextView.apply {
+                    visibility = VISIBLE
+                    text = price.toString()
                 }
+
+
                 val srcDrawable = getResourceId(R.styleable.ProductView_src, -1)
                 if (srcDrawable > -1) {
-                    _binding.productImageView.apply {
+                    binding.productImageView.apply {
                         visibility = VISIBLE
                         setImageResource(srcDrawable)
                     }
@@ -45,16 +43,16 @@ class ProductView @JvmOverloads constructor(
                 val type = getInteger(R.styleable.ProductView_type, 0)
                 when (type) {
                     0 -> {
-                        _binding.addToCartButton.visibility = GONE
-                        _binding.deleteFromCartImageView.visibility = GONE
+                        binding.addToCartButton.visibility = GONE
+                        binding.deleteFromCartImageView.visibility = GONE
                     }
                     1 -> {
-                        _binding.addToCartButton.visibility = VISIBLE
-                        _binding.deleteFromCartImageView.visibility = GONE
+                        binding.addToCartButton.visibility = VISIBLE
+                        binding.deleteFromCartImageView.visibility = GONE
                     }
                     2 -> {
-                        _binding.addToCartButton.visibility = GONE
-                        _binding.deleteFromCartImageView.visibility = VISIBLE
+                        binding.addToCartButton.visibility = GONE
+                        binding.deleteFromCartImageView.visibility = VISIBLE
                     }
                 }
             } finally {

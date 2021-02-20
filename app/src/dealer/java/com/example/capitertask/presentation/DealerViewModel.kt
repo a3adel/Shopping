@@ -1,7 +1,8 @@
 package com.example.capitertask.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.domain.models.NamedOrder
-import com.example.capitertask.domain.models.OrderModel
 import com.example.capitertask.domain.use_cases.GetOrdersByNameUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
@@ -19,6 +20,8 @@ class DealerViewModel @Inject constructor(
     @Named("observed") private val _observed: Scheduler
 ) :
     BaseViewModel() {
+    private val _namedOrdersMutableLiveData = MutableLiveData<List<NamedOrder>>()
+    val namedOrdersLiveData: LiveData<List<NamedOrder>> get() = _namedOrdersMutableLiveData
     fun getOrders() {
         _getOrdersByNameUseCase.getOrders()
             .subscribeOn(_observed)
@@ -40,7 +43,7 @@ class DealerViewModel @Inject constructor(
 
                 override fun onSuccess(t: List<NamedOrder>?) {
                     showProgressBarMutableLiveData.value = SingleEvent(false)
-                    toastMutableLiveData.value = SingleEvent(t?.size.toString())
+                    _namedOrdersMutableLiveData.value = t
 
                 }
             })
