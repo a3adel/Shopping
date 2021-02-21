@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class CreateCartUseCase @Inject constructor(private val _productsRepository: ProductRepository) {
     fun createCart(orderName: String, products: List<ProductModel>): Single<List<CartResponse>> {
-        return _productsRepository.createCart(products)
+        return _productsRepository.createCart(orderName,products)
     }
 }

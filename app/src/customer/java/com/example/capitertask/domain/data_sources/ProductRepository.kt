@@ -18,5 +18,5 @@ interface ProductRepository {
 
     fun getAllProducts():LiveData<List<CartProduct>>
 
-    fun createCart(products:List<CartProduct>):Single<List<CartResponse>>
+    fun createCart(orderName:String,products:List<ProductModel>):Single<List<CartResponse>>
 }

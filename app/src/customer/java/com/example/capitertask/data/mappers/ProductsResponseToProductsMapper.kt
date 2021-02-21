@@ -5,7 +5,7 @@ import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.utils.Mapper
 import javax.inject.Inject
 
-class ProductsMapper @Inject constructor() : Mapper<List<ProductResponse>, ArrayList<ProductModel>>() {
+class ProductsResponseToProductsMapper @Inject constructor() : Mapper<List<ProductResponse>, ArrayList<ProductModel>>() {
     override fun mapFrom(from: List<ProductResponse>): ArrayList<ProductModel> {
         val productsList = ArrayList<ProductModel>()
         for (response in from) {

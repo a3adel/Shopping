@@ -2,7 +2,8 @@ package com.example.capitertask.data.repos
 
 import androidx.lifecycle.LiveData
 import com.example.capitertask.data.api.CustomerAPIService
-import com.example.capitertask.data.mappers.ProductsMapper
+import com.example.capitertask.data.mappers.ProductsModelToCartProducts
+import com.example.capitertask.data.mappers.ProductsResponseToProductsMapper
 import com.example.capitertask.data.models.CartProduct
 import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.data.persistence.CartDao
@@ -23,7 +24,7 @@ class ProductRepositoryImpl @Inject constructor(
         return _productRemoteClient.getProducts(page)
     }
 
-    override fun insertProduct(cartProduct: CartProduct): Long{
+    override fun insertProduct(cartProduct: CartProduct): Long {
         return _productsLocalClient.insertProduct(cartProduct)
     }
 
@@ -39,14 +40,19 @@ class ProductRepositoryImpl @Inject constructor(
         return _productsLocalClient.getCartProducts()
     }
 
-    override fun createCart(products: List<CartProduct>): Single<List<CartResponse>> {
-        return _productRemoteClient.createCart(products)
+    override fun createCart(
+        orderName: String,
+        products: List<ProductModel>
+    ): Single<List<CartResponse>> {
+        return _productRemoteClient.createCart(orderName, products)
     }
+
 }
 
 class ProductRemoteClient @Inject constructor(
     private val _apiService: CustomerAPIService,
-    private val _mapper: ProductsMapper
+    private val _mapper: ProductsResponseToProductsMapper,
+    private val _productsToCartsMapper: ProductsModelToCartProducts
 ) {
     fun getProducts(page: Int): Observable<ArrayList<ProductModel>> {
         return _apiService.getProducts(page).map {
@@ -54,8 +60,10 @@ class ProductRemoteClient @Inject constructor(
         }
     }
 
-    fun createCart(products: List<CartProduct>): Single<List<CartResponse>> {
-        return _apiService.createOrder(products)
+    fun createCart(orderName: String, products: List<ProductModel>): Single<List<CartResponse>> {
+        _productsToCartsMapper.orderName = orderName
+
+        return _apiService.createOrder(_productsToCartsMapper.mapFrom(products))
     }
 }
 
@@ -64,11 +72,11 @@ class ProductLocalClient @Inject constructor(private val _db: CartDao) {
         return _db.insertProduct(cartProduct)
     }
 
-    fun updateProduct(cartProduct: CartProduct): Int{
+    fun updateProduct(cartProduct: CartProduct): Int {
         return _db.updateProduct(cartProduct)
     }
 
-    fun deleteProduct(cartProduct: CartProduct): Int{
+    fun deleteProduct(cartProduct: CartProduct): Int {
         return _db.deleteProduct(cartProduct)
     }
 

@@ -45,6 +45,11 @@ class CartProductsAdapter : RecyclerView.Adapter<CartViewHolder>() {
         if (_products.remove(productModel))
             notifyItemRemoved(index)
     }
+
+    fun clear() {
+        _products.clear()
+        notifyDataSetChanged()
+    }
 }
 
 class CartViewHolder(val binder: ItemCartProductBinding) : RecyclerView.ViewHolder(binder.root) {

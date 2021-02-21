@@ -2,15 +2,16 @@ package com.example.capitertask.presentation.products
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.use_cases.CartInteractor
-import com.example.capitertask.domain.use_cases.GetProductsUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.updateItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.SingleObserver
 import io.reactivex.rxjava3.disposables.Disposable
 import javax.inject.Inject
 import javax.inject.Named
@@ -34,6 +35,8 @@ class ProductsViewModel @Inject constructor(
     private val _productMutableLiveData = MutableLiveData<SingleEvent<ProductModel>>()
     val productLiveData: LiveData<SingleEvent<ProductModel>> get() = _productMutableLiveData
 
+    private val _createCartLiveData = MutableLiveData<SingleEvent<Boolean>>()
+    val createCartLiveData: LiveData<SingleEvent<Boolean>> get() = _createCartLiveData
 
     fun addToCart(productModel: ProductModel) {
         var currentAmount = productModel.amount
@@ -98,7 +101,42 @@ class ProductsViewModel @Inject constructor(
         _cartListMutlableLiveData.postValue(_cartListMutlableLiveData.value)
     }
 
-    fun submitOrder(orderName:String) {
-        _interactor.createCartUseCase.createCart(orderName,_cartListMutlableLiveData.value)
+    fun submitOrder(orderName: String) {
+
+        _cartListMutlableLiveData.value?.let {
+            _interactor.createCartUseCase.createCart(
+                orderName,
+                it.toList()
+            ).observeOn(_observerScheduler)
+                .subscribeOn(_observedScheduler)
+                .subscribe(object : SingleObserver<List<CartResponse>> {
+                    override fun onSubscribe(d: Disposable?) {
+                        d?.let { addDisposable(d) }
+                        showProgressBarMutableLiveData.value = SingleEvent(true)
+                    }
+
+                    override fun onSuccess(t: List<CartResponse>?) {
+                        showProgressBarMutableLiveData.value = SingleEvent(false)
+                        _createCartLiveData.value = SingleEvent((true))
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        showProgressBarMutableLiveData.value = SingleEvent(false)
+                        _createCartLiveData.value = SingleEvent((false))
+
+                        e?.message?.let { toastMutableLiveData.value = SingleEvent(it) }
+                    }
+
+                })
+        }
+    }
+
+    fun clearCart() {
+        _cartListMutlableLiveData.value?.let {
+            for(product in it)
+                removeFromCart(product)
+            it.clear()
+        }
+
     }
 }
