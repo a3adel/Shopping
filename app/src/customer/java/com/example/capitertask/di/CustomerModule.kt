@@ -1,6 +1,10 @@
 package com.example.capitertask.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.capitertask.data.api.CustomerAPIService
+import com.example.capitertask.data.persistence.CustomerDatabase
+import com.example.capitertask.data.persistence.DATABASE_NAME
 import com.example.capitertask.data.repos.ProductRepositoryImpl
 import com.example.capitertask.domain.data_sources.ProductRepository
 import dagger.Module
@@ -13,6 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class CustomerModule {
+
     @Singleton
     @Provides
     fun provideApi(retrofit: Retrofit): CustomerAPIService {
@@ -21,7 +26,13 @@ class CustomerModule {
 
     @Singleton
     @Provides
-    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl):ProductRepository{
+    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl): ProductRepository {
         return productRepositoryImpl
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(context: Context): CustomerDatabase {
+        return Room.databaseBuilder(context, CustomerDatabase::class.java, DATABASE_NAME).build()
     }
 }
