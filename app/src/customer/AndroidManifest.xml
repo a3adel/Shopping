@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity android:name="com.example.capitertask.presentation.cart.CartActivity"></activity>
-        <activity android:name="com.example.capitertask.presentation.products.MainActivity">
+        <activity android:name="com.example.capitertask.presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

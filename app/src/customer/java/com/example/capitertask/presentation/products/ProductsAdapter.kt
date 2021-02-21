@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.capitertask.databinding.ProductItemBinding
 import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.utils.CURRENCY
-import com.example.capitertask.presentation.OnAddItemCartClickListener
+import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
 
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     private val _products = ArrayList<ProductModel>()
@@ -33,10 +33,13 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val productBinder = holder.productBinding.productView.binding
-        productBinder.nameTextView.text = _products.get(position).name
-        productBinder.priceTextView.text = "${_products.get(position).price.toString()} $CURRENCY"
+        val product = _products.get(position)
+        productBinder.nameTextView.text = product.name
+        productBinder.priceTextView.text = "${product.price.toString()} $CURRENCY"
+        productBinder.countTextView.text = product.amount.toString()
         Glide.with(_context).load(_products.get(position).imageUrl)
             .into(productBinder.productImageView)
+
         productBinder.addToCartButton.setOnClickListener {
             _onAddItemToCartClickListener.onClick(
                 _products.get(position)
@@ -46,6 +49,12 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
 
     override fun getItemCount(): Int {
         return _products.size
+    }
+
+    fun updateItem(productModel: ProductModel){
+        val index = _products.indexOf(productModel)
+        _products.set(index,productModel)
+        notifyItemChanged(index)
     }
 }
 

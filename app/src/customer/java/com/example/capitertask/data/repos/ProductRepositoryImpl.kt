@@ -19,7 +19,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val _productsLocalClient: ProductLocalClient
 ) :
     ProductRepository {
-    override fun getProducts(page: Int): Observable<List<ProductModel>> {
+    override fun getProducts(page: Int): Observable<ArrayList<ProductModel>> {
         return _productRemoteClient.getProducts(page)
     }
 
@@ -48,7 +48,7 @@ class ProductRemoteClient @Inject constructor(
     private val _apiService: CustomerAPIService,
     private val _mapper: ProductsMapper
 ) {
-    fun getProducts(page: Int): Observable<List<ProductModel>> {
+    fun getProducts(page: Int): Observable<ArrayList<ProductModel>> {
         return _apiService.getProducts(page).map {
             _mapper.mapFrom(it)
         }

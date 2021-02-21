@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface CustomerAPIService {
     @GET("products")
-    fun getProducts(@Query("page") page: Int = 1): Observable<List<ProductResponse>>
+    fun getProducts(@Query("page") page: Int = 1): Observable<ArrayList<ProductResponse>>
 
     @POST("orders")
     fun createOrder(@Body orders: List<CartProduct>): Single<List<CartResponse>>

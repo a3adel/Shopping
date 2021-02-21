@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 interface ProductRepository {
-    fun getProducts(page: Int = 1): Observable<List<ProductModel>>
+    fun getProducts(page: Int = 1): Observable<ArrayList<ProductModel>>
 
     fun insertProduct(cartProduct: CartProduct): Long
 
