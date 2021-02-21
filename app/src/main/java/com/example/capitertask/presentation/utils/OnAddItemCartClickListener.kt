@@ -1,4 +1,4 @@
-package com.example.capitertask.presentation
+package com.example.capitertask.presentation.utils
 
 import com.example.capitertask.domain.models.ProductModel
 
