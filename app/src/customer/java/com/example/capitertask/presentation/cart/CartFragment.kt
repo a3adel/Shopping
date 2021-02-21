@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.capitertask.R
 import com.example.capitertask.databinding.FragmentCartBinding
 import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.presentation.MainActivity
 import com.example.capitertask.presentation.products.ProductsViewModel
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 import com.example.capitertask.presentation.utils.observe
@@ -48,7 +49,14 @@ class CartFragment : Fragment() {
         _adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener {
             override fun onRemoveClicked(productModel: ProductModel) {
                 _adapter.removeItem(productModel)
+                _viewModel.removeFromCart(productModel)
             }
+        }
+        binding.confirmButton.setOnClickListener {
+            if (binding.orderNameEditText.text.isEmpty())
+                (activity as MainActivity).showToast(getString(R.string.enter_order_name_error))
+            else
+                _viewModel.submitOrder(binding.orderNameEditText.text.toString())
         }
     }
 

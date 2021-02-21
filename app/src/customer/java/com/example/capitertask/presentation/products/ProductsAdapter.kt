@@ -9,6 +9,7 @@ import com.example.capitertask.databinding.ProductItemBinding
 import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.utils.CURRENCY
 import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
+import com.example.capitertask.presentation.utils.updateItem
 
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     private val _products = ArrayList<ProductModel>()
@@ -53,7 +54,7 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
 
     fun updateItem(productModel: ProductModel){
         val index = _products.indexOf(productModel)
-        _products.set(index,productModel)
+        _products.updateItem(productModel)
         notifyItemChanged(index)
     }
 }
