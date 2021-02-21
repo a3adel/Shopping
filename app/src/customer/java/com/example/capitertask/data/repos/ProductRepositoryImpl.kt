@@ -23,15 +23,15 @@ class ProductRepositoryImpl @Inject constructor(
         return _productRemoteClient.getProducts(page)
     }
 
-    override fun insertProduct(cartProduct: CartProduct): Single<Integer> {
+    override fun insertProduct(cartProduct: CartProduct): Long{
         return _productsLocalClient.insertProduct(cartProduct)
     }
 
-    override fun updateProduct(cartProduct: CartProduct): Single<Integer> {
+    override fun updateProduct(cartProduct: CartProduct): Int {
         return _productsLocalClient.updateProduct(cartProduct)
     }
 
-    override fun deleteProduct(cartProduct: CartProduct): Single<Integer> {
+    override fun deleteProduct(cartProduct: CartProduct): Int {
         return _productsLocalClient.deleteProduct(cartProduct)
     }
 
@@ -60,15 +60,15 @@ class ProductRemoteClient @Inject constructor(
 }
 
 class ProductLocalClient @Inject constructor(private val _db: CartDao) {
-    fun insertProduct(cartProduct: CartProduct): Single<Integer> {
+    fun insertProduct(cartProduct: CartProduct): Long {
         return _db.insertProduct(cartProduct)
     }
 
-    fun updateProduct(cartProduct: CartProduct): Single<Integer> {
+    fun updateProduct(cartProduct: CartProduct): Int{
         return _db.updateProduct(cartProduct)
     }
 
-    fun deleteProduct(cartProduct: CartProduct): Single<Integer> {
+    fun deleteProduct(cartProduct: CartProduct): Int{
         return _db.deleteProduct(cartProduct)
     }
 

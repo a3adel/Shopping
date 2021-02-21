@@ -1,6 +1,8 @@
 package com.example.capitertask.di
 
+import android.content.Context
 import com.example.capitertask.BuildConfig
+import com.example.capitertask.CapiterApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +21,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+
     @Singleton
     @Provides
     fun provideInterceptors(): ArrayList<Interceptor> {

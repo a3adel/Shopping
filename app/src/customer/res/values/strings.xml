@@ -1,1 +1,4 @@
-<resources></resources>
+<resources>
+    <string name="enter_order_name_hint">إدخل إسم الطلب</string>
+    <string name="confirm_order">تأكيد الطلب</string>
+</resources>

@@ -17,4 +17,11 @@ data class CartProduct(
     val imageUrl: String,
     @ColumnInfo(name = "quantity")
     val quantity: Int
-)
+){
+    override fun equals(other: Any?): Boolean {
+        if(other is CartProduct){
+            return (other).id == id
+        }
+        return false
+    }
+}

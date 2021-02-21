@@ -4,14 +4,21 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.capitertask.databinding.ProductItemBinding
 import com.example.capitertask.domain.models.ProductModel
-import com.bumptech.glide.Glide
 import com.example.capitertask.domain.utils.CURRENCY
+import com.example.capitertask.presentation.OnAddItemCartClickListener
 
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     private val _products = ArrayList<ProductModel>()
-    private lateinit var _context:Context
+    private lateinit var _context: Context
+    private lateinit var _onAddItemToCartClickListener: OnAddItemCartClickListener
+
+    fun setOnAddItemToCartClickListener(onAddItemToCartClickListener: OnAddItemCartClickListener) {
+        _onAddItemToCartClickListener = onAddItemToCartClickListener
+    }
+
     fun setProducts(products: List<ProductModel>) {
         _products.clear()
         _products.addAll(products)
@@ -30,6 +37,11 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
         productBinder.priceTextView.text = "${_products.get(position).price.toString()} $CURRENCY"
         Glide.with(_context).load(_products.get(position).imageUrl)
             .into(productBinder.productImageView)
+        productBinder.addToCartButton.setOnClickListener {
+            _onAddItemToCartClickListener.onClick(
+                _products.get(position)
+            )
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,6 +49,7 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     }
 }
 
-class ProductViewHolder(val productBinding: ProductItemBinding) : RecyclerView.ViewHolder(productBinding.root) {
+class ProductViewHolder(val productBinding: ProductItemBinding) :
+    RecyclerView.ViewHolder(productBinding.root) {
 
 }

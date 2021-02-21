@@ -10,11 +10,11 @@ import io.reactivex.rxjava3.core.Single
 interface ProductRepository {
     fun getProducts(page: Int = 1): Observable<List<ProductModel>>
 
-    fun insertProduct(cartProduct: CartProduct): Single<Integer>
+    fun insertProduct(cartProduct: CartProduct): Long
 
-    fun updateProduct(cartProduct: CartProduct):Single<Integer>
+    fun updateProduct(cartProduct: CartProduct): Int
 
-    fun deleteProduct(cartProduct: CartProduct):Single<Integer>
+    fun deleteProduct(cartProduct: CartProduct): Int
 
     fun getAllProducts():LiveData<List<CartProduct>>
 

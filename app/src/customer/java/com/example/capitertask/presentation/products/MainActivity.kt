@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capitertask.databinding.ActivityMainBinding
 import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.presentation.OnAddItemCartClickListener
 import com.example.capitertask.presentation.base.BaseActivity
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.observe
@@ -27,8 +28,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initViews() {
+        _adapter.setOnAddItemToCartClickListener(object :OnAddItemCartClickListener{
+            override fun onClick(productModel: ProductModel) {
+                showToast(productModel.name)
+            }
+        })
         binding.productsRecyclerView.adapter = _adapter
         binding.productsRecyclerView.layoutManager = LinearLayoutManager(this)
+
+
     }
 
     private fun observeLiveData() {
