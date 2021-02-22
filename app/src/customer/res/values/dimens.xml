@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="confirm_button_horizontal_dimen">32dp</dimen>
+</resources>
