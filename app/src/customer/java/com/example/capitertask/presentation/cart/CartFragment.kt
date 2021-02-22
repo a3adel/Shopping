@@ -48,7 +48,7 @@ class CartFragment : Fragment() {
     private fun initViews() {
         binding.cartOrdersRecyclerView.layoutManager = LinearLayoutManager(activity)
         binding.cartOrdersRecyclerView.adapter = _adapter
-        _adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener {
+        _adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<ProductModel> {
             override fun onRemoveClicked(productModel: ProductModel) {
                 _adapter.removeItem(productModel)
                 _viewModel.removeFromCart(productModel)
