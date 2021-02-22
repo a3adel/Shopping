@@ -15,7 +15,7 @@ The main directory consists of the base classes and depencies in both of the app
  
 ### Customer App:-
 
-This Application is based on SingleActivity princible with 2 fragments using a SharedViewModel and implementing Clean Architecutre, MVVM and Repository Pattern
+This Application is based on SingleActivity princible with 2 fragments using a SharedViewModel and implementing Clean Architecutre, MVVM, Room Database for later updates and Repository Pattern
 
 ### Dealer App :-
 This Application is based on Clean Architecutre, MVVM and Repository Pattern and it fetches the orders from the server
