@@ -40,7 +40,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initViews() {
-        _adapter.setOnAddItemToCartClickListener(object : OnAddItemCartClickListener {
+        _adapter.setOnAddItemToCartClickListener(object : OnAddItemCartClickListener<ProductModel> {
             override fun onClick(productModel: ProductModel) {
                 viewModel.addToCart(productModel)
             }

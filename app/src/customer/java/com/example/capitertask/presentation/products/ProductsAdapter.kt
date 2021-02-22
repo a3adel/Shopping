@@ -14,9 +14,9 @@ import com.example.capitertask.presentation.utils.updateItem
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
     private val _products = ArrayList<ProductModel>()
     private lateinit var _context: Context
-    private lateinit var _onAddItemToCartClickListener: OnAddItemCartClickListener
+    private lateinit var _onAddItemToCartClickListener: OnAddItemCartClickListener<ProductModel>
 
-    fun setOnAddItemToCartClickListener(onAddItemToCartClickListener: OnAddItemCartClickListener) {
+    fun setOnAddItemToCartClickListener(onAddItemToCartClickListener: OnAddItemCartClickListener<ProductModel>) {
         _onAddItemToCartClickListener = onAddItemToCartClickListener
     }
 

@@ -13,7 +13,7 @@ import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 class CartProductsAdapter : RecyclerView.Adapter<CartViewHolder>() {
     private val _products = ArrayList<ProductModel>()
     private lateinit var _context: Context
-    lateinit var onRemoveItemClickListener: OnRemoveItemClickListener
+    lateinit var onRemoveItemClickListener: OnRemoveItemClickListener<ProductModel>
     fun updateProducts(products: List<ProductModel>) {
         _products.clear()
         _products.addAll(products)
