@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.domain.models.ProductModel
-import com.example.capitertask.domain.use_cases.CartInteractor
+import com.example.capitertask.domain.use_cases.CreateCartUseCase
+import com.example.capitertask.domain.use_cases.GetProductsUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.updateItem
@@ -19,7 +20,8 @@ import javax.inject.Named
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
-    private val _interactor: CartInteractor,
+    private val createCartUseCase: CreateCartUseCase,
+    private val getProductsUseCase: GetProductsUseCase,
     @Named("observed") private val _observedScheduler: Scheduler,
     @Named("observer") private val _observerScheduler: Scheduler
 ) : BaseViewModel() {
@@ -73,7 +75,7 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun getProducts() {
-        _interactor.getProductsUseCase.getProducts(1)
+        getProductsUseCase.getProducts(1)
             .observeOn(_observerScheduler)
             .subscribeOn(_observedScheduler)
             .subscribe(object : Observer<ArrayList<ProductModel>> {
@@ -109,7 +111,7 @@ class ProductsViewModel @Inject constructor(
         val orderProucts = _cartListMutlableLiveData.value
 
         _cartListMutlableLiveData.value?.let {
-            _interactor.createCartUseCase.createCart(
+            createCartUseCase.createCart(
                 orderName,
                 it.toList()
             ).observeOn(_observerScheduler)
