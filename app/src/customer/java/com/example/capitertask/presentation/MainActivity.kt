@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     val viewModel: ProductsViewModel by viewModels()
+    private var _menu: Menu? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -24,13 +25,14 @@ class MainActivity : BaseActivity() {
         val productsFragment = ProductsFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, productsFragment, "PRODUCTS_TAG")
-
             .commit()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_customer, menu)
+        menu?.let { _menu = menu }
         return true
     }
 
@@ -43,5 +45,11 @@ class MainActivity : BaseActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    fun showCartIcon(shouldShow: Boolean) {
+
+        if (_menu != null)
+            _menu?.findItem(R.id.action_cart)?.setVisible(shouldShow)
     }
 }

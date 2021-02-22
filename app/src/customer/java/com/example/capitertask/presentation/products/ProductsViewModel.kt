@@ -59,13 +59,17 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun removeFromCart(productModel: ProductModel) {
+        setProductAmountToZero(productModel)
+        _cartListMutlableLiveData.value?.remove(productModel)
+    }
+
+    private fun setProductAmountToZero(productModel: ProductModel) {
         val products = _productsMutableLiveData.value
         products?.let {
             productModel.amount = 0
             products.updateItem(productModel)
             _productsMutableLiveData.postValue(products)
         }
-
     }
 
     fun getProducts() {
@@ -102,6 +106,7 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun submitOrder(orderName: String) {
+        val orderProucts = _cartListMutlableLiveData.value
 
         _cartListMutlableLiveData.value?.let {
             _interactor.createCartUseCase.createCart(
@@ -133,10 +138,10 @@ class ProductsViewModel @Inject constructor(
 
     fun clearCart() {
         _cartListMutlableLiveData.value?.let {
-            for(product in it)
-                removeFromCart(product)
-            it.clear()
+            for (product in it)
+                setProductAmountToZero(product)
         }
+        _cartListMutlableLiveData.value?.clear()
 
     }
 }

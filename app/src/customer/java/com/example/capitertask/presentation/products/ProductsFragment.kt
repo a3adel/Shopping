@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capitertask.databinding.FragmentProductsBinding
 import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.presentation.MainActivity
 import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.observe
@@ -39,6 +40,10 @@ class ProductsFragment : Fragment() {
         observeLiveData()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
     private fun initViews() {
         _adapter.setOnAddItemToCartClickListener(object : OnAddItemCartClickListener<ProductModel> {
             override fun onClick(productModel: ProductModel) {
