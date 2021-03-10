@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.domain.models.ProductModel
-import com.example.capitertask.domain.use_cases.CartInteractor
+import com.example.capitertask.domain.useCases.CartInteractor
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.updateItem

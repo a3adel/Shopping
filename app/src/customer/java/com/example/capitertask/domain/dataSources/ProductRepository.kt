@@ -1,4 +1,4 @@
-package com.example.capitertask.domain.data_sources
+package com.example.capitertask.domain.dataSources
 
 import androidx.lifecycle.LiveData
 import com.example.capitertask.data.models.CartProduct

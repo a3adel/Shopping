@@ -1,6 +1,6 @@
-package com.example.capitertask.domain.use_cases
+package com.example.capitertask.domain.useCases
 
-import com.example.capitertask.domain.data_sources.ProductRepository
+import com.example.capitertask.domain.dataSources.ProductRepository
 import com.example.capitertask.domain.models.ProductModel
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject

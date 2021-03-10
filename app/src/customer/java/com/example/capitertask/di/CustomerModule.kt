@@ -7,7 +7,7 @@ import com.example.capitertask.data.persistence.CartDao
 import com.example.capitertask.data.persistence.CustomerDatabase
 import com.example.capitertask.data.persistence.DATABASE_NAME
 import com.example.capitertask.data.repos.ProductRepositoryImpl
-import com.example.capitertask.domain.data_sources.ProductRepository
+import com.example.capitertask.domain.dataSources.ProductRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,25 +22,25 @@ class CustomerModule {
 
     @Singleton
     @Provides
-    fun provideApi(retrofit: Retrofit): CustomerAPIService {
-        return retrofit.create(CustomerAPIService::class.java)
-    }
+    fun provideApi(retrofit: Retrofit): CustomerAPIService =
+        retrofit.create(CustomerAPIService::class.java)
+
 
     @Singleton
     @Provides
-    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl): ProductRepository {
-        return productRepositoryImpl
-    }
+    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl): ProductRepository =
+        productRepositoryImpl
+
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): CustomerDatabase {
-        return Room.databaseBuilder(context, CustomerDatabase::class.java, DATABASE_NAME).build()
-    }
+    fun provideDatabase(@ApplicationContext context: Context): CustomerDatabase =
+        Room.databaseBuilder(context, CustomerDatabase::class.java, DATABASE_NAME).build()
+
 
     @Singleton
     @Provides
-    fun provideCartDao(customerDatabase: CustomerDatabase): CartDao {
-        return customerDatabase.getCartProductsDao()
-    }
+    fun provideCartDao(customerDatabase: CustomerDatabase): CartDao =
+        customerDatabase.getCartProductsDao()
+
 }

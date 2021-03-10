@@ -1,4 +1,4 @@
-package com.example.capitertask.domain.use_cases
+package com.example.capitertask.domain.useCases
 
 import javax.inject.Inject
 

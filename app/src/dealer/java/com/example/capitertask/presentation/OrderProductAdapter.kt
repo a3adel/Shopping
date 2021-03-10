@@ -29,9 +29,8 @@ class OrderProductAdapter : RecyclerView.Adapter<OrderProductAdapter.OrderProduc
         holder.bind(orderProducts[position])
     }
 
-    override fun getItemCount(): Int {
-        return orderProducts.size
-    }
+    override fun getItemCount(): Int = orderProducts.size
+
 
     inner class OrderProductViewHolder(val binder: ItemOrderProductBinding) :
         RecyclerView.ViewHolder(binder.root) {

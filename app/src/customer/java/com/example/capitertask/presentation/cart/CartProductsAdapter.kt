@@ -10,48 +10,53 @@ import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.utils.CURRENCY
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 
-class CartProductsAdapter : RecyclerView.Adapter<CartViewHolder>() {
-    private val _products = ArrayList<ProductModel>()
-    private lateinit var _context: Context
+class CartProductsAdapter : RecyclerView.Adapter<CartProductsAdapter.CartViewHolder>() {
+    private val products = ArrayList<ProductModel>()
+    private lateinit var context: Context
     lateinit var onRemoveItemClickListener: OnRemoveItemClickListener<ProductModel>
     fun updateProducts(products: List<ProductModel>) {
-        _products.clear()
-        _products.addAll(products)
+        this.products.clear()
+        this.products.addAll(products)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        _context = parent.context
-        val binder = ItemCartProductBinding.inflate(LayoutInflater.from(_context), parent, false)
+        context = parent.context
+        val binder = ItemCartProductBinding.inflate(LayoutInflater.from(context), parent, false)
         return CartViewHolder(binder)
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val productView = holder.binder.cartProductView
-        val product = _products.get(position)
-        productView.binding.nameTextView.text = product.name
-        productView.binding.countTextView.text = product.amount.toString()
-        productView.binding.priceTextView.text = "${product.price.toString()} $CURRENCY"
-        productView.binding.deleteFromCartImageView.setOnClickListener {
-            onRemoveItemClickListener.onRemoveClicked(product)
-        }
-        Glide.with(_context).load(product.imageUrl).into(productView.binding.productImageView)
+        holder.bind(products[position])
     }
 
-    override fun getItemCount(): Int = _products.size
+    override fun getItemCount(): Int = products.size
 
     fun removeItem(productModel: ProductModel) {
-        val index = _products.indexOf(productModel)
-        if (_products.remove(productModel))
+        val index = products.indexOf(productModel)
+        if (products.remove(productModel))
             notifyItemRemoved(index)
     }
 
     fun clear() {
-        _products.clear()
+        products.clear()
         notifyDataSetChanged()
+    }
+
+    inner class CartViewHolder(private val binder: ItemCartProductBinding) :
+        RecyclerView.ViewHolder(binder.root) {
+        fun bind(product: ProductModel) {
+            val productView = binder.cartProductView
+
+            productView.binding.nameTextView.text = product.name
+            productView.binding.countTextView.text = product.amount.toString()
+            productView.binding.priceTextView.text = "${product.price.toString()} $CURRENCY"
+            productView.binding.deleteFromCartImageView.setOnClickListener {
+                onRemoveItemClickListener.onRemoveClicked(product)
+            }
+            Glide.with(context).load(product.imageUrl).into(productView.binding.productImageView)
+        }
     }
 }
 
-class CartViewHolder(val binder: ItemCartProductBinding) : RecyclerView.ViewHolder(binder.root) {
 
-}
