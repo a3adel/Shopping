@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.domain.useCases.CartInteractor
+import com.example.capitertask.domain.useCases.CreateCartUseCase
+import com.example.capitertask.domain.useCases.GetProductsUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.updateItem
@@ -19,7 +21,8 @@ import javax.inject.Named
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
-    private val _interactor: CartInteractor,
+    private val createCartUseCase: CreateCartUseCase,
+    private val getProductsUseCase: GetProductsUseCase,
     @Named("observed") private val _observedScheduler: Scheduler,
     @Named("observer") private val _observerScheduler: Scheduler
 ) : BaseViewModel() {
@@ -59,17 +62,21 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun removeFromCart(productModel: ProductModel) {
+        setProductAmountToZero(productModel)
+        _cartListMutlableLiveData.value?.remove(productModel)
+    }
+
+    private fun setProductAmountToZero(productModel: ProductModel) {
         val products = _productsMutableLiveData.value
         products?.let {
             productModel.amount = 0
             products.updateItem(productModel)
             _productsMutableLiveData.postValue(products)
         }
-
     }
 
     fun getProducts() {
-        _interactor.getProductsUseCase.getProducts(1)
+        getProductsUseCase.getProducts(1)
             .observeOn(_observerScheduler)
             .subscribeOn(_observedScheduler)
             .subscribe(object : Observer<ArrayList<ProductModel>> {
@@ -102,9 +109,10 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun submitOrder(orderName: String) {
+        val orderProucts = _cartListMutlableLiveData.value
 
         _cartListMutlableLiveData.value?.let {
-            _interactor.createCartUseCase.createCart(
+            createCartUseCase.createCart(
                 orderName,
                 it.toList()
             ).observeOn(_observerScheduler)
@@ -133,10 +141,10 @@ class ProductsViewModel @Inject constructor(
 
     fun clearCart() {
         _cartListMutlableLiveData.value?.let {
-            for(product in it)
-                removeFromCart(product)
-            it.clear()
+            for (product in it)
+                setProductAmountToZero(product)
         }
+        _cartListMutlableLiveData.value?.clear()
 
     }
 }

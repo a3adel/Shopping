@@ -61,6 +61,8 @@ class CartFragment : Fragment() {
             else
                 viewModel.submitOrder(binding.orderNameEditText.text.toString())
         }
+        (activity as MainActivity).showCartIcon(false)
+
     }
 
     private fun observeViewModels() {
@@ -114,6 +116,8 @@ class CartFragment : Fragment() {
                 binding.orderNameEditText.visibility = View.VISIBLE
                 binding.confirmButton.text = getString(R.string.confirm_order)
                 activity?.supportFragmentManager?.popBackStack()
+                (activity as MainActivity).showCartIcon(true)
+
             }
         })
     }
