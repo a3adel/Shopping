@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.capitertask.R
 import com.example.capitertask.databinding.ProductItemBinding
 import com.example.capitertask.domain.models.ProductModel
-import com.example.capitertask.domain.utils.CURRENCY
 import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
 import com.example.capitertask.presentation.utils.updateItem
 
@@ -36,7 +36,7 @@ class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
         val productBinder = holder.productBinding.productView.binding
         val product = _products.get(position)
         productBinder.nameTextView.text = product.name
-        productBinder.priceTextView.text = "${product.price.toString()} $CURRENCY"
+        productBinder.priceTextView.text = "${product.price.toString()} ${_context.getString(R.string.currency)}"
         productBinder.countTextView.text = product.amount.toString()
         Glide.with(_context).load(_products.get(position).imageUrl)
             .into(productBinder.productImageView)

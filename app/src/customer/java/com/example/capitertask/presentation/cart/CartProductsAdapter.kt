@@ -1,13 +1,14 @@
 package com.example.capitertask.presentation.cart
 
 import android.content.Context
+import android.icu.number.Precision.currency
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.capitertask.R
 import com.example.capitertask.databinding.ItemCartProductBinding
 import com.example.capitertask.domain.models.ProductModel
-import com.example.capitertask.domain.utils.CURRENCY
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 
 class CartProductsAdapter : RecyclerView.Adapter<CartProductsAdapter.CartViewHolder>() {
@@ -50,7 +51,7 @@ class CartProductsAdapter : RecyclerView.Adapter<CartProductsAdapter.CartViewHol
 
             productView.binding.nameTextView.text = product.name
             productView.binding.countTextView.text = product.amount.toString()
-            productView.binding.priceTextView.text = "${product.price.toString()} $CURRENCY"
+            productView.binding.priceTextView.text = "${product.price.toString()} ${context.getString(R.string.currency)}"
             productView.binding.deleteFromCartImageView.setOnClickListener {
                 onRemoveItemClickListener.onRemoveClicked(product)
             }
