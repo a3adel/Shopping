@@ -38,7 +38,6 @@ class ProductView @JvmOverloads constructor(
                         visibility = VISIBLE
                         setImageResource(srcDrawable)
                     }
-                } else {
                 }
                 val type = getInteger(R.styleable.ProductView_type, 0)
                 when (type) {
