@@ -33,7 +33,7 @@ class CartFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View{
+    ): View {
         cartBinding = FragmentCartBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,13 +56,10 @@ class CartFragment : Fragment() {
         }
         binding.confirmButton.setOnClickListener {
 
-            if (binding.orderNameEditText.text.isEmpty())
-                (activity as MainActivity).showToast(getString(R.string.enter_order_name_error))
-            else
-                cartViewModel.submitOrder(
-                    binding.orderNameEditText.text.toString(),
-                    cartProducts = cartViewModel.getCart()
-                )
+            cartViewModel.submitOrder(
+                binding.orderNameEditText.text.toString(),
+                cartProducts = cartViewModel.getCart()
+            )
         }
         (activity as MainActivity).showCartIcon(false)
 
@@ -73,6 +70,7 @@ class CartFragment : Fragment() {
         observe(sharedViewModel.showProgressBarLiveData, ::handleProgressBar)
         observe(cartViewModel.createCartLiveData, ::handleCreateCartResponse)
         observe(sharedViewModel.toastLiveData, ::handleShowToast)
+        observe(cartViewModel.toastLiveData, ::handleShowToast)
     }
 
     private fun handleShowToast(singleEvent: SingleEvent<String>) {
