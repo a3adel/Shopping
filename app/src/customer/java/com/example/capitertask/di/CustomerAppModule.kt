@@ -2,7 +2,8 @@ package com.example.capitertask.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.capitertask.data.api.CustomerAPIService
+import com.example.capitertask.data.api.CartAPIInterface
+import com.example.capitertask.data.api.ProductsAPIInterface
 import com.example.capitertask.data.persistence.CartDao
 import com.example.capitertask.data.persistence.CustomerDatabase
 import com.example.capitertask.data.persistence.DATABASE_NAME
@@ -18,19 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class CustomerModule {
-
-    @Singleton
-    @Provides
-    fun provideApi(retrofit: Retrofit): CustomerAPIService =
-        retrofit.create(CustomerAPIService::class.java)
-
-
-    @Singleton
-    @Provides
-    fun provideProductsRepo(productRepositoryImpl: ProductRepositoryImpl): ProductRepository =
-        productRepositoryImpl
-
+class CustomerAppModule {
 
     @Singleton
     @Provides

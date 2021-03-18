@@ -12,12 +12,11 @@ import com.example.capitertask.R
 import com.example.capitertask.databinding.FragmentCartBinding
 import com.example.capitertask.domain.models.ProductModel
 import com.example.capitertask.presentation.MainActivity
-import com.example.capitertask.presentation.products.ProductsViewModel
+import com.example.capitertask.presentation.SharedViewModel
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
@@ -28,12 +27,13 @@ class CartFragment : Fragment() {
     // onDestroyView.
     private val binding get() = cartBinding!!
 
-    private val viewModel: ProductsViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val cartViewModel: CartViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         cartBinding = FragmentCartBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,16 +42,16 @@ class CartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         observeViewModels()
-        viewModel.getCart()
+        cartViewModel.getCartItems(sharedViewModel.getSharedList())
     }
 
     private fun initViews() {
         binding.cartOrdersRecyclerView.layoutManager = LinearLayoutManager(activity)
         binding.cartOrdersRecyclerView.adapter = adapter
-        adapter.onRemoveItemClickListener= object : OnRemoveItemClickListener<ProductModel> {
+        adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<ProductModel> {
             override fun onRemoveClicked(productModel: ProductModel) {
                 adapter.removeItem(productModel)
-                viewModel.removeFromCart(productModel)
+                sharedViewModel.setProductCountToZero(productModel)
             }
         }
         binding.confirmButton.setOnClickListener {
@@ -59,17 +59,20 @@ class CartFragment : Fragment() {
             if (binding.orderNameEditText.text.isEmpty())
                 (activity as MainActivity).showToast(getString(R.string.enter_order_name_error))
             else
-                viewModel.submitOrder(binding.orderNameEditText.text.toString())
+                cartViewModel.submitOrder(
+                    binding.orderNameEditText.text.toString(),
+                    cartProducts = cartViewModel.getCart()
+                )
         }
         (activity as MainActivity).showCartIcon(false)
 
     }
 
     private fun observeViewModels() {
-        observe(viewModel.cartListLiveData, ::handleCart)
-        observe(viewModel.showProgressBarLiveData, ::handleProgressBar)
-        observe(viewModel.createCartLiveData, ::handleCreateCartResponse)
-        observe(viewModel.toastLiveData, ::handleShowToast)
+        observe(cartViewModel.cartListLiveData, ::handleCart)
+        observe(sharedViewModel.showProgressBarLiveData, ::handleProgressBar)
+        observe(cartViewModel.createCartLiveData, ::handleCreateCartResponse)
+        observe(sharedViewModel.toastLiveData, ::handleShowToast)
     }
 
     private fun handleShowToast(singleEvent: SingleEvent<String>) {
@@ -80,7 +83,7 @@ class CartFragment : Fragment() {
         singleEvent.getContentIfNotHandled()?.let {
             if (it) {
                 adapter.clear()
-                viewModel.clearCart()
+                sharedViewModel.clearCart()
 
                 binding.orderConfirmedTextView.visibility = View.VISIBLE
                 binding.orderNameEditText.visibility = View.GONE
@@ -103,8 +106,9 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun handleCart(arrayList: ArrayList<ProductModel>) {
-        adapter.updateProducts(arrayList)
+    private fun handleCart(singleEvent: SingleEvent<List<ProductModel>>) {
+        singleEvent.getContentIfNotHandled()
+            ?.let { productsList -> adapter.updateProducts(productsList) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
