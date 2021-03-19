@@ -10,7 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capitertask.R
 import com.example.capitertask.databinding.FragmentCartBinding
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.presentation.MainActivity
 import com.example.capitertask.presentation.SharedViewModel
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
@@ -48,8 +48,8 @@ class CartFragment : Fragment() {
     private fun initViews() {
         binding.cartOrdersRecyclerView.layoutManager = LinearLayoutManager(activity)
         binding.cartOrdersRecyclerView.adapter = adapter
-        adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<ProductModel> {
-            override fun onRemoveClicked(productModel: ProductModel) {
+        adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<Product> {
+            override fun onRemoveClicked(productModel: Product) {
                 adapter.removeItem(productModel)
                 sharedViewModel.setProductCountToZero(productModel)
             }
@@ -104,7 +104,7 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun handleCart(singleEvent: SingleEvent<List<ProductModel>>) {
+    private fun handleCart(singleEvent: SingleEvent<List<Product>>) {
         singleEvent.getContentIfNotHandled()
             ?.let { productsList -> adapter.updateProducts(productsList) }
     }

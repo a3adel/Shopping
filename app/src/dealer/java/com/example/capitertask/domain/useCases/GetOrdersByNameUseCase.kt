@@ -2,11 +2,11 @@ package com.example.capitertask.domain.useCases
 
 import com.example.capitertask.domain.data_sources.OrdersRepo
 import com.example.capitertask.domain.models.NamedOrder
-import com.example.capitertask.domain.models.OrderModelToOrderProductMapper
+import com.example.capitertask.domain.models.OrderModelToProductMapper
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-class GetOrdersByNameUseCase @Inject constructor(private val repo: OrdersRepo, private val mapper: OrderModelToOrderProductMapper) {
+class GetOrdersByNameUseCase @Inject constructor(private val repo: OrdersRepo, private val mapper: OrderModelToProductMapper) {
     fun getOrders(): Single<List<NamedOrder>> {
         return repo.getOrders().map { orders->
             val namedOrders = ArrayList<NamedOrder>()

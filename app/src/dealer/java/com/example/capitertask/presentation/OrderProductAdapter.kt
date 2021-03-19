@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.capitertask.R
 import com.example.capitertask.databinding.ItemOrderProductBinding
-import com.example.capitertask.domain.models.OrderProduct
+import com.example.capitertask.domain.models.Product
 
 class OrderProductAdapter : RecyclerView.Adapter<OrderProductAdapter.OrderProductViewHolder>() {
-    private val orderProducts = ArrayList<OrderProduct>()
+    private val orderProducts = ArrayList<Product>()
     private lateinit var context: Context
-    fun setOrderProducts(products: List<OrderProduct>) {
+    fun setOrderProducts(products: List<Product>) {
         orderProducts.clear()
         orderProducts.addAll((products))
         notifyDataSetChanged()
@@ -34,7 +34,7 @@ class OrderProductAdapter : RecyclerView.Adapter<OrderProductAdapter.OrderProduc
 
     inner class OrderProductViewHolder(val binder: ItemOrderProductBinding) :
         RecyclerView.ViewHolder(binder.root) {
-        fun bind(order: OrderProduct) {
+        fun bind(order: Product) {
             val productViewBinder = binder.orderProductProductView.binding
             productViewBinder.nameTextView.text = order.name
             productViewBinder.priceTextView.text =

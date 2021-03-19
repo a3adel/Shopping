@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.di.AppModule
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.domain.useCases.CreateCartUseCase
 import com.example.capitertask.domain.useCases.GetCartItemsUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
@@ -24,11 +24,11 @@ class CartViewModel @Inject constructor(
     @Named(AppModule.MAIN) private val observer: Scheduler,
     private val validator: CartValidator
 ) : BaseViewModel() {
-    private val cartListMutableLiveData = MutableLiveData<SingleEvent<List<ProductModel>>>()
-    val cartListLiveData: LiveData<SingleEvent<List<ProductModel>>> get() = cartListMutableLiveData
+    private val cartListMutableLiveData = MutableLiveData<SingleEvent<List<Product>>>()
+    val cartListLiveData: LiveData<SingleEvent<List<Product>>> get() = cartListMutableLiveData
     private val createCartMutableLiveData = MutableLiveData<SingleEvent<Boolean>>()
     val createCartLiveData: LiveData<SingleEvent<Boolean>> get() = createCartMutableLiveData
-    fun submitOrder(orderName: String, cartProducts: List<ProductModel>) {
+    fun submitOrder(orderName: String, cartProducts: List<Product>) {
         if (validator.validateOrderName(orderName) == CartValidator.ValidationResult.TRUE)
             createCartUseCase.createCart(
                 orderName,
@@ -60,12 +60,12 @@ class CartViewModel @Inject constructor(
             }
     }
 
-    fun getCartItems(products: List<ProductModel>) {
+    fun getCartItems(products: List<Product>) {
         cartListMutableLiveData.postValue(SingleEvent(getCartItemsUseCase.getCartItems(products)))
     }
 
-    fun getCart(): List<ProductModel> {
-        val cartList = ArrayList<ProductModel>()
+    fun getCart(): List<Product> {
+        val cartList = ArrayList<Product>()
         cartListLiveData.value?.peekContent()?.let {
             cartList.addAll(it)
         }

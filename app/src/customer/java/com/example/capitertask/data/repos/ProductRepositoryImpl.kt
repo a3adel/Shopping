@@ -2,24 +2,20 @@ package com.example.capitertask.data.repos
 
 import androidx.lifecycle.LiveData
 import com.example.capitertask.data.api.ProductsAPIInterface
-import com.example.capitertask.data.mappers.ProductsModelToCartProducts
 import com.example.capitertask.data.mappers.ProductsResponseToProductsMapper
 import com.example.capitertask.data.models.CartProduct
-import com.example.capitertask.data.models.CartResponse
 import com.example.capitertask.data.persistence.CartDao
 import com.example.capitertask.domain.dataSources.ProductRepository
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class ProductRepositoryImpl @Inject constructor(
     private val productRemoteClient: ProductRemoteClient,
     private val productsLocalClient: ProductLocalClient
 ) :
     ProductRepository {
-    override fun getProducts(page: Int): Observable<ArrayList<ProductModel>> =
+    override fun getProducts(page: Int): Observable<ArrayList<Product>> =
         productRemoteClient.getProducts(page)
 
 
@@ -46,7 +42,7 @@ class ProductRepositoryImpl @Inject constructor(
 class ProductRemoteClient @Inject constructor(
     private val apiService: ProductsAPIInterface,
     private val mapper: ProductsResponseToProductsMapper) {
-    fun getProducts(page: Int): Observable<ArrayList<ProductModel>> {
+    fun getProducts(page: Int): Observable<ArrayList<Product>> {
         return apiService.getProducts(page).map {
             mapper.mapFrom(it)
         }

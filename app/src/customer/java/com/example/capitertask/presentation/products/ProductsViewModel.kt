@@ -3,7 +3,7 @@ package com.example.capitertask.presentation.products
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.capitertask.di.AppModule
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.domain.useCases.GetProductsUseCase
 import com.example.capitertask.presentation.base.BaseViewModel
 import com.example.capitertask.presentation.utils.SingleEvent
@@ -22,8 +22,8 @@ class ProductsViewModel @Inject constructor(
     @Named(AppModule.MAIN) private val mainScheduler: Scheduler
 ) : BaseViewModel() {
 
-    private val _productsMutableLiveData = MutableLiveData<ArrayList<ProductModel>>()
-    val productsLiveData: LiveData<ArrayList<ProductModel>>
+    private val _productsMutableLiveData = MutableLiveData<ArrayList<Product>>()
+    val productsLiveData: LiveData<ArrayList<Product>>
         get() = _productsMutableLiveData
 
 
@@ -31,13 +31,13 @@ class ProductsViewModel @Inject constructor(
         getProductsUseCase.getProducts(1)
             .observeOn(mainScheduler)
             .subscribeOn(ioScheduler)
-            .subscribe(object : Observer<ArrayList<ProductModel>> {
+            .subscribe(object : Observer<ArrayList<Product>> {
                 override fun onSubscribe(d: Disposable?) {
                     showProgressBarMutableLiveData.value = SingleEvent<Boolean>(true)
                     d?.let { addDisposable(d) }
                 }
 
-                override fun onNext(t: ArrayList<ProductModel>?) {
+                override fun onNext(t: ArrayList<Product>?) {
                     _productsMutableLiveData.value = t
                 }
 

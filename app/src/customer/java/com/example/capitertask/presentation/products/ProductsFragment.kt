@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capitertask.databinding.FragmentProductsBinding
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.presentation.SharedViewModel
 import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
 import com.example.capitertask.presentation.utils.SingleEvent
@@ -46,8 +46,8 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initViews() {
-        _adapter.setOnAddItemToCartClickListener(object : OnAddItemCartClickListener<ProductModel> {
-            override fun onClick(productModel: ProductModel) {
+        _adapter.setOnAddItemToCartClickListener(object : OnAddItemCartClickListener<Product> {
+            override fun onClick(productModel: Product) {
                 sharedViewModel.incrementItemCount(productModel)
             }
         })
@@ -61,12 +61,12 @@ class ProductsFragment : Fragment() {
         observe(sharedViewModel.productLiveData, ::handleAmount)
     }
 
-    private fun handleAmount(product: ProductModel) {
+    private fun handleAmount(product: Product) {
             _adapter.updateItem(product)
     }
 
 
-    private fun handleProducts(products: List<ProductModel>) {
+    private fun handleProducts(products: List<Product>) {
         _adapter.setProducts(products)
         sharedViewModel.setSharedList(products)
     }
