@@ -10,48 +10,51 @@ import com.example.capitertask.databinding.ItemNamedOrderBinding
 import com.example.capitertask.domain.models.NamedOrder
 
 
-class NamedOrdersAdapter : RecyclerView.Adapter<NamedOrderViewHolder>() {
-    private val _namedOrders = ArrayList<NamedOrder>()
-    private lateinit var _context: Context
+class NamedOrdersAdapter : RecyclerView.Adapter<NamedOrdersAdapter.NamedOrderViewHolder>() {
+    private val namedOrders = ArrayList<NamedOrder>()
+    private lateinit var context: Context
     fun setNamedOrders(namedOrders: List<NamedOrder>) {
-        _namedOrders.clear()
-        _namedOrders.addAll(namedOrders)
+        this.namedOrders.clear()
+        this.namedOrders.addAll(namedOrders)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NamedOrderViewHolder {
-        _context = parent.context
-        val view = ItemNamedOrderBinding.inflate(LayoutInflater.from(_context), parent, false)
+        context = parent.context
+        val view = ItemNamedOrderBinding.inflate(LayoutInflater.from(context), parent, false)
         return NamedOrderViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NamedOrderViewHolder, position: Int) {
-        val binder = holder.binder
-        binder.nameTextView.text = _namedOrders.get(position).name
-        val adapter = OrderProductAdapter()
 
-        _namedOrders.get(position).products?.let {
-            val linearLayoutManager = LinearLayoutManager(_context)
-            binder.productsRecyclerView.layoutManager = linearLayoutManager
-            val dividerItemDecoration = DividerItemDecoration(
-                _context,
-                linearLayoutManager.getOrientation()
-            )
-            binder.productsRecyclerView.addItemDecoration(dividerItemDecoration)
-            binder.productsRecyclerView.adapter = adapter
-            adapter.setOrderProducts(it)
-
-        }
-
-
+        holder.bind(namedOrders[position])
     }
 
     override fun getItemCount(): Int {
-        return _namedOrders.size
+        return namedOrders.size
+    }
+
+    inner class NamedOrderViewHolder(val binder: ItemNamedOrderBinding) :
+        RecyclerView.ViewHolder(binder.root) {
+        fun bind(order: NamedOrder) {
+            binder.nameTextView.text = order.name
+            val adapter = OrderProductAdapter()
+
+            order.products?.let {
+                val linearLayoutManager = LinearLayoutManager(context)
+                binder.productsRecyclerView.layoutManager = linearLayoutManager
+                val dividerItemDecoration = DividerItemDecoration(
+                    context,
+                    linearLayoutManager.getOrientation()
+                )
+                binder.productsRecyclerView.addItemDecoration(dividerItemDecoration)
+                binder.productsRecyclerView.adapter = adapter
+                adapter.setOrderProducts(it)
+
+            }
+        }
+
     }
 }
 
-class NamedOrderViewHolder(val binder: ItemNamedOrderBinding) :
-    RecyclerView.ViewHolder(binder.root) {
 
-}

@@ -33,11 +33,12 @@ class DealerMainActivity : BaseActivity() {
     }
 
     private fun handleProgressBar(singleEvent: SingleEvent<Boolean>) {
-        if(singleEvent.peekContent())
-            dealerBinding.loadingProgressBar.visibility = View.VISIBLE
-        else
-            dealerBinding.loadingProgressBar.visibility = View.GONE
-
+        singleEvent.getContentIfNotHandled()?.let {
+            if (it)
+                dealerBinding.loadingProgressBar.visibility = View.VISIBLE
+            else
+                dealerBinding.loadingProgressBar.visibility = View.GONE
+        }
     }
 
     private fun handleNamedOrders(list: List<NamedOrder>) {

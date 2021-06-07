@@ -15,13 +15,12 @@ import javax.inject.Singleton
 class DealerAppModule {
     @Singleton
     @Provides
-    fun provideDealerAPIService(retrofit: Retrofit): DealerAPIService {
-        return retrofit.create(DealerAPIService::class.java)
-    }
+    fun provideDealerAPIService(retrofit: Retrofit): DealerAPIService =
+        retrofit.create(DealerAPIService::class.java)
+
 
     @Singleton
     @Provides
-    fun provideOrdersRepo(orderRepoImpl:OrdersRepoImpl): OrdersRepo {
-        return orderRepoImpl
-    }
+    fun provideOrdersRepo(orderRepoImpl: OrdersRepoImpl): OrdersRepo = orderRepoImpl
+
 }

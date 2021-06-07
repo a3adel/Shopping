@@ -1,4 +1,6 @@
 <resources>
     <string name="add_to_cart">أضف إلى السلة</string>
+    <string name="invalid_name">please enter valid order name</string>
+    <string name="currency">جنيه</string>
 
 </resources>

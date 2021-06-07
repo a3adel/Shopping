@@ -1,8 +1,6 @@
 package com.example.capitertask.di
 
-import android.content.Context
 import com.example.capitertask.BuildConfig
-import com.example.capitertask.CapiterApp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +19,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-
+    companion object{
+        const val IO = "observed"
+        const val MAIN = "observer"
+    }
 
     @Singleton
     @Provides
@@ -63,14 +64,14 @@ class AppModule {
 
     @Singleton
     @Provides
-    @Named("observer")
+    @Named(MAIN)
     fun provideObserverScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
     }
 
     @Singleton
     @Provides
-    @Named("observed")
+    @Named(IO)
     fun provideObservedOnScheduler(): Scheduler {
         return Schedulers.io()
     }

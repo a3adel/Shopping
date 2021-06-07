@@ -10,31 +10,31 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.capitertask.R
 import com.example.capitertask.databinding.FragmentCartBinding
-import com.example.capitertask.domain.models.ProductModel
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.presentation.MainActivity
-import com.example.capitertask.presentation.products.ProductsViewModel
+import com.example.capitertask.presentation.SharedViewModel
 import com.example.capitertask.presentation.utils.OnRemoveItemClickListener
 import com.example.capitertask.presentation.utils.SingleEvent
 import com.example.capitertask.presentation.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class CartFragment : Fragment() {
-    private var _binding: FragmentCartBinding? = null
-    private val _adapter = CartProductsAdapter()
+    private var cartBinding: FragmentCartBinding? = null
+    private val adapter = CartProductsAdapter()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
+    private val binding get() = cartBinding!!
 
-    private val _viewModel: ProductsViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val cartViewModel: CartViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentCartBinding.inflate(inflater, container, false)
+    ): View {
+        cartBinding = FragmentCartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,34 +42,35 @@ class CartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         observeViewModels()
-        _viewModel.getCart()
+        cartViewModel.getCartItems(sharedViewModel.getSharedList())
     }
 
     private fun initViews() {
         binding.cartOrdersRecyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.cartOrdersRecyclerView.adapter = _adapter
-        _adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<ProductModel> {
-            override fun onRemoveClicked(productModel: ProductModel) {
-                _adapter.removeItem(productModel)
-                _viewModel.removeFromCart(productModel)
+        binding.cartOrdersRecyclerView.adapter = adapter
+        adapter.onRemoveItemClickListener = object : OnRemoveItemClickListener<Product> {
+            override fun onRemoveClicked(productModel: Product) {
+                adapter.removeItem(productModel)
+                sharedViewModel.setProductCountToZero(productModel)
             }
         }
         binding.confirmButton.setOnClickListener {
 
-            if (binding.orderNameEditText.text.isEmpty())
-                (activity as MainActivity).showToast(getString(R.string.enter_order_name_error))
-            else
-                _viewModel.submitOrder(binding.orderNameEditText.text.toString())
+            cartViewModel.submitOrder(
+                binding.orderNameEditText.text.toString(),
+                cartProducts = cartViewModel.getCart()
+            )
         }
         (activity as MainActivity).showCartIcon(false)
 
     }
 
     private fun observeViewModels() {
-        observe(_viewModel.cartListLiveData, ::handleCart)
-        observe(_viewModel.showProgressBarLiveData, ::handleProgressBar)
-        observe(_viewModel.createCartLiveData, ::handleCreateCartResponse)
-        observe(_viewModel.toastLiveData, ::handleShowToast)
+        observe(cartViewModel.cartListLiveData, ::handleCart)
+        observe(sharedViewModel.showProgressBarLiveData, ::handleProgressBar)
+        observe(cartViewModel.createCartLiveData, ::handleCreateCartResponse)
+        observe(sharedViewModel.toastLiveData, ::handleShowToast)
+        observe(cartViewModel.toastLiveData, ::handleShowToast)
     }
 
     private fun handleShowToast(singleEvent: SingleEvent<String>) {
@@ -79,8 +80,8 @@ class CartFragment : Fragment() {
     private fun handleCreateCartResponse(singleEvent: SingleEvent<Boolean>) {
         singleEvent.getContentIfNotHandled()?.let {
             if (it) {
-                _adapter.clear()
-                _viewModel.clearCart()
+                adapter.clear()
+                sharedViewModel.clearCart()
 
                 binding.orderConfirmedTextView.visibility = View.VISIBLE
                 binding.orderNameEditText.visibility = View.GONE
@@ -103,8 +104,9 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun handleCart(arrayList: ArrayList<ProductModel>) {
-        _adapter.updateProducts(arrayList)
+    private fun handleCart(singleEvent: SingleEvent<List<Product>>) {
+        singleEvent.getContentIfNotHandled()
+            ?.let { productsList -> adapter.updateProducts(productsList) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

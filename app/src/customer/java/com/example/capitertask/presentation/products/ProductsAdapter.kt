@@ -5,56 +5,56 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.capitertask.R
 import com.example.capitertask.databinding.ProductItemBinding
-import com.example.capitertask.domain.models.ProductModel
-import com.example.capitertask.domain.utils.CURRENCY
+import com.example.capitertask.domain.models.Product
 import com.example.capitertask.presentation.utils.OnAddItemCartClickListener
 import com.example.capitertask.presentation.utils.updateItem
 
 class ProductsAdapter : RecyclerView.Adapter<ProductViewHolder>() {
-    private val _products = ArrayList<ProductModel>()
-    private lateinit var _context: Context
-    private lateinit var _onAddItemToCartClickListener: OnAddItemCartClickListener<ProductModel>
+    private val products = ArrayList<Product>()
+    private lateinit var context: Context
+    private lateinit var onAddItemToCartClickListener: OnAddItemCartClickListener<Product>
 
-    fun setOnAddItemToCartClickListener(onAddItemToCartClickListener: OnAddItemCartClickListener<ProductModel>) {
-        _onAddItemToCartClickListener = onAddItemToCartClickListener
+    fun setOnAddItemToCartClickListener(onAddItemToCartClickListener: OnAddItemCartClickListener<Product>) {
+        this.onAddItemToCartClickListener = onAddItemToCartClickListener
     }
 
-    fun setProducts(products: List<ProductModel>) {
-        _products.clear()
-        _products.addAll(products)
+    fun setProducts(products: List<Product>) {
+        this.products.clear()
+        this.products.addAll(products)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        _context = parent.context
-        val view = ProductItemBinding.inflate(LayoutInflater.from(_context), parent, false)
+        context = parent.context
+        val view = ProductItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return ProductViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val productBinder = holder.productBinding.productView.binding
-        val product = _products.get(position)
+        val product = products.get(position)
         productBinder.nameTextView.text = product.name
-        productBinder.priceTextView.text = "${product.price.toString()} $CURRENCY"
-        productBinder.countTextView.text = product.amount.toString()
-        Glide.with(_context).load(_products.get(position).imageUrl)
+        productBinder.priceTextView.text = "${product.price} ${context.getString(R.string.currency)}"
+        productBinder.countTextView.text = product.quantity.toString()
+        Glide.with(context).load(products.get(position).imageUrl)
             .into(productBinder.productImageView)
 
         productBinder.addToCartButton.setOnClickListener {
-            _onAddItemToCartClickListener.onClick(
-                _products.get(position)
+            onAddItemToCartClickListener.onClick(
+                products.get(position)
             )
         }
     }
 
     override fun getItemCount(): Int {
-        return _products.size
+        return products.size
     }
 
-    fun updateItem(productModel: ProductModel){
-        val index = _products.indexOf(productModel)
-        _products.updateItem(productModel)
+    fun updateItem(productModel: Product){
+        val index = products.indexOf(productModel)
+        products.updateItem(productModel)
         notifyItemChanged(index)
     }
 }
